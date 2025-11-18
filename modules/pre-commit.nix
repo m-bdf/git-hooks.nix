@@ -95,7 +95,6 @@ let
         set +e
         # Set HOME to a temporary directory for pre-commit to create its cache files in.
         HOME=$(mktemp -d)
-        ln -fs ${cfg.configFile} ${cfg.configPath}
         git init -q
         git add .
         git config --global user.email "you@example.com"
@@ -104,10 +103,10 @@ let
         if [[ ${toString (compare cfg.installStages [ "manual" ])} -eq 0 ]]
         then
           echo "Running: $ pre-commit run --hook-stage manual --all-files"
-          ${lib.getExe cfg.package} run -c ${cfg.configPath} --hook-stage manual --all-files
+          ${lib.getExe cfg.package} run -c ${cfg.configFile} --hook-stage manual --all-files
         else
           echo "Running: $ pre-commit run --all-files"
-          ${lib.getExe cfg.package}  run -c ${cfg.configPath} --all-files
+          ${lib.getExe cfg.package}  run -c ${cfg.configFile} --all-files
         fi
         exitcode=$?
         git --no-pager diff --color
